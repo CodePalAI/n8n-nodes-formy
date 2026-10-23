@@ -1,0 +1,65 @@
+{
+	"name": "n8n-nodes-formy",
+	"version": "0.1.0",
+	"description": "n8n nodes for Formy, the Hebrew-first form builder: start a workflow when a form receives a new submission, read workspaces, forms and fields, and send documents for signature.",
+	"license": "MIT",
+	"homepage": "https://github.com/CodePalAI/n8n-nodes-formy#readme",
+	"keywords": [
+		"n8n-community-node-package",
+		"n8n",
+		"formy",
+		"forms",
+		"e-signature",
+		"hebrew",
+		"israel"
+	],
+	"author": {
+		"name": "Formy (CodePal)",
+		"email": "support@formy.co.il",
+		"url": "https://formy.co.il"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodePalAI/n8n-nodes-formy.git"
+	},
+	"bugs": {
+		"url": "https://github.com/CodePalAI/n8n-nodes-formy/issues"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"test": "vitest run",
+		"scan": "node scripts/scan.mjs",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/FormyApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Formy/Formy.node.js",
+			"dist/nodes/FormyTrigger/FormyTrigger.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "0.52.5",
+		"eslint": "9.32.0",
+		"n8n-workflow": "2.43.5",
+		"prettier": "3.6.2",
+		"release-it": "^21.1.0",
+		"typescript": "5.9.2",
+		"vitest": "^3.2.4"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}

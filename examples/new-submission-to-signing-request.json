@@ -1,0 +1,67 @@
+{
+  "name": "Formy: send a document for signature on every new submission",
+  "nodes": [
+    {
+      "id": "5c3f2d4e-1a2b-4c3d-8e9f-0a1b2c3d4e5f",
+      "name": "Formy Trigger",
+      "type": "n8n-nodes-formy.formyTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "form": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      }
+    },
+    {
+      "id": "6d4e3f5a-2b3c-4d5e-9f0a-1b2c3d4e5f6a",
+      "name": "Send for Signature",
+      "type": "n8n-nodes-formy.formy",
+      "typeVersion": 1,
+      "position": [
+        320,
+        0
+      ],
+      "parameters": {
+        "resource": "signingRequest",
+        "operation": "create",
+        "form": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "signerEmail": "={{ $json.answers['Email'] }}",
+        "answers": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Formy Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send for Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

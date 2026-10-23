@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-formy.formyTrigger",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Communication", "Productivity"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://github.com/CodePalAI/n8n-nodes-formy#credentials"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://github.com/CodePalAI/n8n-nodes-formy#formy-trigger"
+			}
+		]
+	}
+}

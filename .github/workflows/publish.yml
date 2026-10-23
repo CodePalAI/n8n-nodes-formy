@@ -1,0 +1,66 @@
+# Publishes n8n-nodes-formy to npm, with an npm provenance statement, when a
+# version tag (for example 0.1.0) is pushed. n8n requires provenance from
+# GitHub Actions for verified community nodes published since 1 May 2026.
+#
+# One-time setup, on npmjs.com:
+#   - First release: add a granular access token that may publish
+#     n8n-nodes-formy as the repository secret NPM_TOKEN.
+#   - Afterwards (recommended): n8n-nodes-formy › Settings › Trusted Publisher ›
+#     GitHub Actions, repository CodePalAI/n8n-nodes-formy, workflow
+#     publish.yml. Then delete the NPM_TOKEN secret; npm uses GitHub's OIDC
+#     token instead.
+#
+# Releasing: bump "version" in package.json and CHANGELOG.md, commit, then
+#   git tag 0.1.1 && git push origin main 0.1.1
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    permissions:
+      # Mints the OIDC token npm signs the provenance statement with.
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      # Trusted publishing needs npm 11.5.1 or later.
+      - name: Update npm
+        run: npm install -g npm@^11.5.1
+
+      - name: The tag matches package.json
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_NAME" != "$version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $version"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: Scan
+        run: npm run scan
+
+      # In GitHub Actions `n8n-node release` lints, builds and runs
+      # `npm publish` with NPM_CONFIG_PROVENANCE=true.
+      - name: Release
+        run: npm run release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
